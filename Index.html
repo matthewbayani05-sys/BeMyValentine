@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        /* Animated pastel background */
+        background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+        background-size: 400% 400%;
+        animation: gradientBG 12s ease infinite;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        padding: 40px;
+        border-radius: 25px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        color: white;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .options label {
+        font-size: 1.4rem;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.5);
+        margin-right: 8px;
+        cursor: pointer;
+    }
+
+    #yesContent {
+        display: none;
+        text-align: center;
+    }
+
+    #yesContent img {
+        width: 200px;
+        height: 200px;
+        margin: 10px;
+        border-radius: 10px;
+    }
+
+    #noContent {
+        display: none;
+        text-align: center;
+    }
+
+    #noContent img {
+        width: 400px;
+        height: 400px;
+        border-radius: 10px;
+    }
+
+    /* Floating hearts */
+    .bg-heart {
+        position: absolute;
+        color: rgba(255,255,255,0.3);
+        animation: float 8s linear infinite;
+        font-size: 30px;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(100vh);
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-10vh);
+            opacity: 0;
+        }
+    }
+
+    /* Sparkle effect */
+    .sparkle {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background: white;
+        border-radius: 50%;
+        animation: sparkle 3s infinite ease-in-out;
+    }
+
+    @keyframes sparkle {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1 id="question">Will You Be My Valentine? 💖</h1>
+    <div class="options" id="options">
+        <label><input type="checkbox" id="yesOption"> Yes 💕</label>
+        <label><input type="checkbox" id="noOption"> No 😢</label>
+    </div>
+
+    <div id="yesContent">
+        <h2>I LOVE YOU VERY MUCH</h2>
+        <img src="pic1.jpg" alt="Picture 1">
+        <img src="pic2.jpg" alt="Picture 2">
+        <img src="pic3.jpg" alt="Picture 3">
+        <img src="pic4.jpg" alt="Picture 4">
+    </div>
+
+    <div id="noContent">
+        <img src="pic5.jpg" alt="Picture 5">
+    </div>
+</div>
+
+<audio id="musicYes">
+    <source src="cant_help_falling_in_love.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="musicNo">
+    <source src="lonely.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const yesOption = document.getElementById("yesOption");
+    const noOption = document.getElementById("noOption");
+    const musicYes = document.getElementById("musicYes");
+    const musicNo = document.getElementById("musicNo");
+    const options = document.getElementById("options");
+    const question = document.getElementById("question");
+    const yesContent = document.getElementById("yesContent");
+    const noContent = document.getElementById("noContent");
+
+    noOption.addEventListener("change", function() {
+        if (noOption.checked) {
+            options.style.display = "none";
+            question.style.display = "none";
+            noContent.style.display = "block";
+            musicNo.play();
+        }
+    });
+
+    yesOption.addEventListener("change", function() {
+        if (yesOption.checked) {
+            options.style.display = "none";
+            question.style.display = "none";
+            yesContent.style.display = "block";
+            musicYes.play();
+            createHearts();
+        }
+    });
+
+    function createHearts() {
+        setInterval(() => {
+            const heart = document.createElement("div");
+            heart.classList.add("bg-heart");
+            heart.innerHTML = "💗";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = Math.random() * 30 + 20 + "px";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }, 300);
+    }
+
+    // Sparkles generator
+    setInterval(() => {
+        const sparkle = document.createElement("div");
+        sparkle.classList.add("sparkle");
+        sparkle.style.left = Math.random() * 100 + "vw";
+        sparkle.style.top = Math.random() * 100 + "vh";
+        document.body.appendChild(sparkle);
+
+        setTimeout(() => {
+            sparkle.remove();
+        }, 3000);
+    }, 200);
+</script>
+
+</body>
+</html>
