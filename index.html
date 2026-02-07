@@ -68,21 +68,9 @@
     }
 
     #yesContent img {
-        width: 200px;
-        height: 200px;
-        margin: 10px;
+        width: 400px;
+        height: 400px;
         border-radius: 10px;
-    }
-
-    #yesContent button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 1.2rem;
-        background: #ff6b9d;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
     }
 
     #noContent {
@@ -94,23 +82,6 @@
         width: 400px;
         height: 400px;
         border-radius: 10px;
-    }
-
-    #confirmation {
-        display: none;
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    #confirmation button {
-        margin: 10px;
-        padding: 10px 20px;
-        font-size: 1.2rem;
-        background: #ff6b9d;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
     }
 
     /* Floating hearts */
@@ -162,21 +133,11 @@
 
     <div id="yesContent">
         <h2>I LOVE YOU VERY MUCH</h2>
-        <img src="pic1.jpg" alt="Picture 1">
-        <img src="pic2.jpg" alt="Picture 2">
-        <img src="pic3.jpg" alt="Picture 3">
-        <img src="pic4.jpg" alt="Picture 4">
-        <button id="noButton">No</button>
+        <img id="yesSlideshow" src="pic1.jpg" alt="Slideshow">
     </div>
 
     <div id="noContent">
-        <img src="pic5.jpg" alt="Picture 5">
-    </div>
-
-    <div id="confirmation">
-        <h2>ARE YOU SURE?</h2>
-        <button id="confirmYes">Yes</button>
-        <button id="confirmNo">No</button>
+        <img id="noSlideshow" src="pic11.jpg" alt="Slideshow">
     </div>
 </div>
 
@@ -197,38 +158,50 @@
     const question = document.getElementById("question");
     const yesContent = document.getElementById("yesContent");
     const noContent = document.getElementById("noContent");
-    const confirmation = document.getElementById("confirmation");
-    const noButton = document.getElementById("noButton");
-    const confirmYes = document.getElementById("confirmYes");
-    const confirmNo = document.getElementById("confirmNo");
+    const yesSlideshow = document.getElementById("yesSlideshow");
+    const noSlideshow = document.getElementById("noSlideshow");
 
-    function resetToOriginal() {
-        // Hide all content
-        yesContent.style.display = "none";
-        noContent.style.display = "none";
-        confirmation.style.display = "none";
-        // Show question and options
-        question.style.display = "block";
-        options.style.display = "block";
-        // Uncheck checkboxes
-        yesOption.checked = false;
-        noOption.checked = false;
-        // Stop any playing music
-        musicYes.pause();
-        musicYes.currentTime = 0;
-        musicNo.pause();
-        musicNo.currentTime = 0;
+    let yesSlideIndex = 0;
+    let noSlideIndex = 0;
+    let yesInterval;
+    let noInterval;
+
+    const yesImages = [
+        "pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg",
+        "pic6.jpg", "pic7.jpg", "pic8.jpg", "pic9.jpg", "pic10.jpg"
+    ];
+
+    const noImages = [
+        "pic11.jpg", "pic12.jpg", "pic13.jpg", "pic14.jpg", "pic15.jpg",
+        "pic16.jpg", "pic17.jpg", "pic18.jpg", "pic19.jpg", "pic20.jpg"
+    ];
+
+    function startYesSlideshow() {
+        yesInterval = setInterval(() => {
+            yesSlideIndex = (yesSlideIndex + 1) % yesImages.length;
+            yesSlideshow.src = yesImages[yesSlideIndex];
+        }, 3000); // Change image every 3 seconds
+    }
+
+    function startNoSlideshow() {
+        noInterval = setInterval(() => {
+            noSlideIndex = (noSlideIndex + 1) % noImages.length;
+            noSlideshow.src = noImages[noSlideIndex];
+        }, 3000); // Change image every 3 seconds
+    }
+
+    function stopSlideshows() {
+        clearInterval(yesInterval);
+        clearInterval(noInterval);
     }
 
     noOption.addEventListener("change", function() {
         if (noOption.checked) {
             options.style.display = "none";
             question.style.display = "none";
+            noContent.style.display = "block";
             musicNo.play();
-            // After 10 seconds, show confirmation
-            setTimeout(() => {
-                confirmation.style.display = "block";
-            }, 10000);
+            startNoSlideshow();
         }
     });
 
@@ -238,21 +211,9 @@
             question.style.display = "none";
             yesContent.style.display = "block";
             musicYes.play();
+            startYesSlideshow();
             createHearts();
         }
-    });
-
-    noButton.addEventListener("click", function() {
-        resetToOriginal();
-    });
-
-    confirmYes.addEventListener("click", function() {
-        confirmation.style.display = "none";
-        noContent.style.display = "block";
-    });
-
-    confirmNo.addEventListener("click", function() {
-        resetToOriginal();
     });
 
     function createHearts() {
